@@ -18,10 +18,11 @@ GRAMMAR (modified EBNF):
 
 ## ########################################################################
 
-<command> : <expression>
-          | <assignment> 
-          | <output> 
-          | <EXIT!>
+<command> : ( <expression> 
+            | <assignment> 
+            | <output> 
+            | <EXIT!> 
+            ) /EOF/
 
 ## ########################################################################
 
