@@ -59,7 +59,7 @@ GRAMMAR (modified EBNF):
 
 
 class Variable:
-    def __init__(self, var_type, value):
+    def __init__(self, var_type: str, value: int | float):
         """
         A Variable is defined by its type and its value.
         """
