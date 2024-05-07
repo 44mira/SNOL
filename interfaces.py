@@ -58,6 +58,18 @@ GRAMMAR (modified EBNF):
 """
 
 
+class Token:
+    def __init__(self, token_type: str, value: str):
+        """
+        A Token is defined by its token type and its value.
+
+        These are delimited by spaces or the occurence of a non-conforming
+        character
+        """
+        self.token_type = token_type
+        self.value = value
+
+
 class Variable:
     def __init__(self, var_type: str, value: int | float):
         """
