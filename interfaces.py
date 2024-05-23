@@ -57,40 +57,29 @@ GRAMMAR (modified EBNF):
 
 """
 
-
 class Token:
     def __init__(self, token_type: str, value: str):
-        """
-        A Token is defined by its token type and its value.
-
-        These are delimited by spaces or the occurence of a non-conforming
-        character
-        """
+        # A Token is defined by its token type and its value.
         self.token_type = token_type
         self.value = value
 
     def __str__(self) -> str:
+        # String representation of a Token for testing
         return f"<{self.token_type} {self.value}>"
 
     def __eq__(self, other) -> bool:
         # We overload equality to test tokens easier
         return self.token_type == other.token_type and self.value == other.value
 
+
 class Variable:
     def __init__(self, var_type: str, value: int | float):
-        """
-        A Variable is defined by its type and its value.
-        """
+        # A Variable is defined by its type and its value.
         self.var_type = var_type
         self.value = value
 
     def __str__(self) -> str:
-        """
-        The string representation of a variable is its value and its type
-        separated by a colon and wrapped by angle brackets < >.
-
-        :return: string representation of a Variable
-        """
+        # String representation of a Variable for testing
         return f"<{self.value} : {self.var_type}>"
 
 
