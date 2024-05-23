@@ -1,11 +1,11 @@
 import re
 from interfaces import Token
 
-def lexer(command: str):
-    NUMBER = r'\d+\.?\d*'
-    VARIABLE = r'[a-zA-Z]+\d*'
-    OPERATOR = r'[=+-/*%]'
+NUMBER = r'\d+\.?\d*'
+VARIABLE = r'[a-zA-Z]+[0-9a-zA-Z]*'
+OPERATOR = r'[=+-/*%]'
 
+def lexer(command: str):
     definitions = '|'.join([
         'BEG',
         'PRINT',
@@ -18,15 +18,17 @@ def lexer(command: str):
 
     tokens = re.findall(pattern, command)
 
-    return tokenize(tokens)
+    return _tokenize(tokens)
 
-def tokenize(tokens: list):
+def _tokenize(tokens: list):
     for token in tokens:
-        if re.match(r'\d+\.?\d*', token):
+        if re.match(NUMBER, token):
             yield Token('NUMBER', token)
-        elif re.match(r'BEG|PRINT|EXIT!', token):
+        elif re.match(r'BEG|PRINT|EXIT!|=', token):
             yield Token('KEYWORD', token)
-        elif re.match(r'[a-zA-Z]+\d*', token):
+        elif re.match(r'[+-]', token):
+            yield Token('PRECEDENCE 1', token)
+        elif re.match(r'[*/%]', token):
+            yield Token('PRECEDENCE 2', token)
+        elif re.match(VARIABLE, token):
             yield Token('VARIABLE', token)
-        elif re.match(r'[=+-/*%]', token):
-            yield Token('OPERATOR', token)
