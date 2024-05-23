@@ -1,11 +1,12 @@
 import re
+from typing import Generator
 from interfaces import Token
 
 NUMBER = r'\d+\.?\d*'
 VARIABLE = r'[a-zA-Z]+[0-9a-zA-Z]*'
 OPERATOR = r'[=+-/*%]'
 
-def lexer(command: str):
+def lexer(command: str) -> Generator[Token, list[str], None]:
     definitions = '|'.join([
         'BEG',
         'PRINT',
@@ -20,16 +21,16 @@ def lexer(command: str):
 
     return _tokenize(tokens)
 
-def _tokenize(tokens: list):
+def _tokenize(tokens: list) -> Generator[Token, list[str], None]:
     for token in tokens:
         if re.match(NUMBER, token):
-            yield Token('NUMBER', token)
+            yield ('NUMBER', token)
         elif re.match(r'BEG|PRINT|EXIT!|=', token):
-            yield Token('KEYWORD', token)
+            yield ('KEYWORD', token)
         elif re.match(r'[+-]', token):
-            yield Token('PRECEDENCE 1', token)
+            yield ('PRECEDENCE 1', token)
         elif re.match(r'[*/%]', token):
-            yield Token('PRECEDENCE 2', token)
+            yield ('PRECEDENCE 2', token)
         elif re.match(VARIABLE, token):
-            yield Token('VARIABLE', token)
-    yield Token('EOF', "0")
+            yield ('VARIABLE', token)
+    yield ('EOF', "0")
