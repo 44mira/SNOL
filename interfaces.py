@@ -78,13 +78,9 @@ class Error(Exception):
         super().__init__(message)
 
 
-# A Variable is a tuple of a string and an int or a float,
-# denoting the name of the variable and its value.
-type Variable = tuple[str, int | float]
-
 # An Environment consists of str-Variable pairs,
 # denoting name and their value in memory.
-type Environment = Dict[str, Variable]
+type Environment = Dict[str, int | float]
 
 # A Token is a tuple of two strings, the type of the token, and the value
 type Token = tuple[str, str]
