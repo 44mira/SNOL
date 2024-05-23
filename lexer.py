@@ -7,7 +7,7 @@ OPERATOR = r"[=+-/*%]"
 
 
 def lexer(command: str) -> list[Token]:
-    definitions = "|".join(["BEG", "PRINT", "EXIT!", NUMBER, VARIABLE, OPERATOR, "."])
+    definitions = "|".join(["BEG", "PRINT", "EXIT!", NUMBER, VARIABLE, OPERATOR, r"\S"])
     pattern = re.compile(rf"{definitions}")
 
     tokens = re.findall(pattern, command)
@@ -25,6 +25,8 @@ def _tokenize(tokens: list[str]) -> list[Token]:
             return ("PRECEDENCE 1", token)
         elif re.match(r"[*/%]", token):
             return ("PRECEDENCE 2", token)
+        elif re.match(r"[()]", token):
+            return ("PRECEDENCE 3", token)
         elif re.match(VARIABLE, token):
             return ("VARIABLE", token)
         else:
