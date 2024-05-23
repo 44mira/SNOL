@@ -54,7 +54,7 @@ def _parse_expression(expression) -> Node | None:
         return
 
     while expression[0][0] == "PRECEDENCE 1":
-        operator = expression[0]
+        operator = expression[0][1]
         del expression[0]
 
         right = _parse_term(expression)
@@ -80,7 +80,7 @@ def _parse_term(term) -> Node | None:
         return
 
     while term[0][0] == "PRECEDENCE 2":
-        operator = term[0]
+        operator = term[0][1]
         del term[0]
 
         right = _parse_factor(term)
@@ -109,7 +109,7 @@ def _parse_factor(factor) -> Node | None:
         return result
 
     elif factor[0][0] == "NUMBER" or factor[0][0] == "VARIABLE":
-        result = Node(factor[0], "FACTOR")
+        result = Node(factor[0][1], "FACTOR")
         del factor[0]
         return result
     # edge case falls off and returns None
@@ -124,13 +124,13 @@ def _parse_assignment(assignment) -> Node | None:
     elif assignment[0][0] != "VARIABLE" or assignment[1] != ("KEYWORD", "="):
         return
 
-    variable = assignment[0]
+    variable = assignment[0][1]
     del assignment[0]
     del assignment[0]  # remove equal sign
 
     expression = _parse_expression(assignment)
 
-    return Node(None, "ASSIGNMENT", [variable, expression])
+    return Node(variable, "ASSIGNMENT", [expression])
 
 
 def _parse_output(output) -> Node | None:
