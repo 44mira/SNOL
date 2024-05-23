@@ -57,9 +57,26 @@ GRAMMAR (modified EBNF):
 
 """
 
+
+class Node:
+    def __init__(self, value: str | None, node_type: str, children=[]) -> None:
+        self.value = value
+        self.node_type = node_type
+        self.children = children
+
+    def __str__(self) -> str:
+        if not self.children:
+            return f"{self.node_type}: {self.value}"
+
+        children = "\n\t".join([f"{child}" for child in self.children])
+
+        return f"{self.node_type}: {self.value}\n[[\n\t{children}\n]]\n"
+
+
 class Error(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
 
 # A Variable is a tuple of a string and an int or a float,
 # denoting the name of the variable and its value.
