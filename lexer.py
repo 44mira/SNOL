@@ -1,36 +1,36 @@
 import re
-from typing import Generator
-from interfaces import Token
+from interfaces import Token, Error
 
-NUMBER = r'\d+\.?\d*'
-VARIABLE = r'[a-zA-Z]+[0-9a-zA-Z]*'
-OPERATOR = r'[=+-/*%]'
+NUMBER = r"\d+\.?\d*"
+VARIABLE = r"[a-zA-Z]+[0-9a-zA-Z]*"
+OPERATOR = r"[=+-/*%]"
 
-def lexer(command: str) -> Generator[Token, list[str], None]:
-    definitions = '|'.join([
-        'BEG',
-        'PRINT',
-        'EXIT!',         
-        NUMBER,
-        VARIABLE,
-        OPERATOR
-    ])
+
+def lexer(command: str) -> list[Token]:
+    definitions = "|".join(["BEG", "PRINT", "EXIT!", NUMBER, VARIABLE, OPERATOR, "."])
     pattern = re.compile(rf"{definitions}")
 
     tokens = re.findall(pattern, command)
 
     return _tokenize(tokens)
 
-def _tokenize(tokens: list) -> Generator[Token, list[str], None]:
-    for token in tokens:
+
+def _tokenize(tokens: list[str]) -> list[Token]:
+    def helper(token: str) -> Token:
         if re.match(NUMBER, token):
-            yield ('NUMBER', token)
-        elif re.match(r'BEG|PRINT|EXIT!|=', token):
-            yield ('KEYWORD', token)
-        elif re.match(r'[+-]', token):
-            yield ('PRECEDENCE 1', token)
-        elif re.match(r'[*/%]', token):
-            yield ('PRECEDENCE 2', token)
+            return ("NUMBER", token)
+        elif re.match(r"BEG|PRINT|EXIT!|=", token):
+            return ("KEYWORD", token)
+        elif re.match(r"[+-]", token):
+            return ("PRECEDENCE 1", token)
+        elif re.match(r"[*/%]", token):
+            return ("PRECEDENCE 2", token)
         elif re.match(VARIABLE, token):
-            yield ('VARIABLE', token)
-    yield ('EOF', "0")
+            return ("VARIABLE", token)
+        else:
+            raise Error(f"Invalid token: {token}")
+
+    tokenized = [helper(token) for token in tokens]
+    tokenized.append(("EOF", "0"))
+
+    return tokenized
