@@ -7,7 +7,7 @@ OPERATOR = r"[=+-/*%]"
 
 
 def lexer(command: str) -> list[Token]:
-    definitions = "|".join(["BEG", "PRINT", "EXIT!", NUMBER, VARIABLE, OPERATOR, "."])
+    definitions = "|".join(["BEG", "PRINT", "EXIT!", NUMBER, VARIABLE, OPERATOR, r"\S"])
     pattern = re.compile(rf"{definitions}")
 
     tokens = re.findall(pattern, command)
