@@ -118,7 +118,7 @@ def _parse_factor(factor) -> Node | None:
 def _parse_assignment(assignment) -> Node | None:
     if assignment[0] == ("KEYWORD", "BEG") and assignment[1][0] == "VARIABLE":
         del assignment[0]
-        result = Node(assignment[0], "BEG")
+        result = Node(assignment[0][1], "BEG")
         del assignment[0]
         return result
     elif assignment[0][0] != "VARIABLE" or assignment[1] != ("KEYWORD", "="):
@@ -140,12 +140,13 @@ def _parse_output(output) -> Node | None:
     del output[0]  # remove print keyword
 
     if output[0][0] == "NUMBER" or output[0][0] == "VARIABLE":
-        result = Node(output[0], "OUTPUT")
+        result = Node(output[0][0], "OUTPUT", [output[0][1]])
         del output[0]
         return result
 
 
-def _parse_exit(exit) -> Node | None:
-    if exit[0] != ("KEYWORD", "EXIT!"):
+def _parse_exit(cmd) -> Node | None:
+    if cmd[0] != ("KEYWORD", "EXIT!"):
         return
+    del cmd[0]
     return Node(None, "EXIT")
