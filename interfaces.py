@@ -66,11 +66,11 @@ class Node:
 
     def __str__(self) -> str:
         if not self.children:
-            return f"{self.node_type}: {self.value}"
+            return f"<{self.node_type} {self.value}>"
 
-        children = "\n\t".join([f"{child}" for child in self.children])
+        children = ", ".join([f"{child}" for child in self.children])
 
-        return f"{self.node_type}: {self.value}\n[[\n\t{children}\n]]\n"
+        return f"<{self.node_type} {self.value}> ({children})"
 
 
 class Error(Exception):
