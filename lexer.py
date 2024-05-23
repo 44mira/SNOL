@@ -32,3 +32,4 @@ def _tokenize(tokens: list):
             yield Token('PRECEDENCE 2', token)
         elif re.match(VARIABLE, token):
             yield Token('VARIABLE', token)
+    yield Token('EOF', "0")
