@@ -57,6 +57,10 @@ GRAMMAR (modified EBNF):
 
 """
 
+class Error(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
 # A Variable is a tuple of a string and an int or a float,
 # denoting the name of the variable and its value.
 type Variable = tuple[str, int | float]
