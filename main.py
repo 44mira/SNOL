@@ -11,12 +11,10 @@
 
 from interfaces import Environment
 
-#  TODO:
-# - Evaluator
 
 from lexer import lexer
-# from parser import parser
 from parser import parser
+from evaluator import evaluator
 from interfaces import Error
 
 # from evaluator import evaluator
@@ -34,11 +32,11 @@ def interpret(command: str, env: Environment):
     try:
         tokens = lexer(command)
         ast = parser(tokens)
-        print(f"\t{ast}")
-        # result = evaluator(ast, env)
-        # ...
+        result = evaluator(ast, env)
     except Error as e:
         print(f"Error: {e}")
+    except KeyError as e:
+        print(f"Error: Variable {e} is not defined")
 
 
 def eval_loop():
