@@ -72,6 +72,9 @@ class Token:
     def __str__(self) -> str:
         return f"<{self.token_type} {self.value}>"
 
+    def __eq__(self, other) -> bool:
+        # We overload equality to test tokens easier
+        return self.token_type == other.token_type and self.value == other.value
 
 class Variable:
     def __init__(self, var_type: str, value: int | float):
