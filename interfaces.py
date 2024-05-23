@@ -57,32 +57,13 @@ GRAMMAR (modified EBNF):
 
 """
 
-class Token:
-    def __init__(self, token_type: str, value: str):
-        # A Token is defined by its token type and its value.
-        self.token_type = token_type
-        self.value = value
-
-    def __str__(self) -> str:
-        # String representation of a Token for testing
-        return f"<{self.token_type} {self.value}>"
-
-    def __eq__(self, other) -> bool:
-        # We overload equality to test tokens easier
-        return self.token_type == other.token_type and self.value == other.value
-
-
-class Variable:
-    def __init__(self, var_type: str, value: int | float):
-        # A Variable is defined by its type and its value.
-        self.var_type = var_type
-        self.value = value
-
-    def __str__(self) -> str:
-        # String representation of a Variable for testing
-        return f"<{self.value} : {self.var_type}>"
-
+# A Variable is a tuple of a string and an int or a float,
+# denoting the name of the variable and its value.
+type Variable = tuple[str, int | float]
 
 # An Environment consists of str-Variable pairs,
 # denoting name and their value in memory.
 type Environment = Dict[str, Variable]
+
+# A Token is a tuple of two strings, the type of the token, and the value
+type Token = tuple[str, str]
