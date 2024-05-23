@@ -12,11 +12,10 @@
 from interfaces import Environment
 
 #  TODO:
-# - Lexer
 # - Parser
 # - Evaluator
 
-# from lexer import lexer
+from lexer import lexer
 # from parser import parser
 # from evaluator import evaluator
 
@@ -30,7 +29,8 @@ def interpret(command: str, env: Environment):
     :param command str: the command to be interpreted
     """
 
-    # tokens = lexer(command)
+    tokens = lexer(command)
+    print(*tokens)
     # ast = parser(tokens)
     # result = evaluator(ast, env)
 
@@ -49,10 +49,7 @@ def eval_loop():
 
 
 def main():
-    print(
-        "The SNOL Environment is now active, \
-          you may proceed with giving your commands"
-    )
+    print( "The SNOL Environment is now active, you may proceed with giving your commands")
     eval_loop()
 
 

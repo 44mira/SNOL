@@ -69,6 +69,9 @@ class Token:
         self.token_type = token_type
         self.value = value
 
+    def __str__(self) -> str:
+        return f"<{self.token_type} {self.value}>"
+
 
 class Variable:
     def __init__(self, var_type: str, value: int | float):
