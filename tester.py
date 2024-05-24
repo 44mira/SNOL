@@ -4,10 +4,11 @@ from evaluator import evaluator, Environment, Node
 from unittest.mock import patch
 from parser import parser
 
+
 class TestLexer(unittest.TestCase):
     def test_lexer_with_numbers(self):
         command = "123"
-        expected_output = [('NUMBER', '123'), ('EOF', '0')]
+        expected_output = [("NUMBER", "123"), ("EOF", "0")]
         result = lexer(command)
         self.assertEqual(result, expected_output)
         if result == expected_output:
@@ -17,7 +18,12 @@ class TestLexer(unittest.TestCase):
 
     def test_lexer_with_keywords(self):
         command = "BEG PRINT EXIT!"
-        expected_output = [('KEYWORD', 'BEG'), ('KEYWORD', 'PRINT'), ('KEYWORD', 'EXIT!'), ('EOF', '0')]
+        expected_output = [
+            ("KEYWORD", "BEG"),
+            ("KEYWORD", "PRINT"),
+            ("KEYWORD", "EXIT!"),
+            ("EOF", "0"),
+        ]
         result = lexer(command)
         self.assertEqual(result, expected_output)
         if result == expected_output:
@@ -27,7 +33,14 @@ class TestLexer(unittest.TestCase):
 
     def test_lexer_with_operators(self):
         command = "+ - * / %"
-        expected_output = [('PRECEDENCE 1', '+'), ('PRECEDENCE 1', '-'), ('PRECEDENCE 2', '*'), ('PRECEDENCE 2', '/'), ('PRECEDENCE 2', '%'), ('EOF', '0')]
+        expected_output = [
+            ("PRECEDENCE 1", "+"),
+            ("PRECEDENCE 1", "-"),
+            ("PRECEDENCE 2", "*"),
+            ("PRECEDENCE 2", "/"),
+            ("PRECEDENCE 2", "%"),
+            ("EOF", "0"),
+        ]
         result = lexer(command)
         self.assertEqual(result, expected_output)
         if result == expected_output:
@@ -44,6 +57,7 @@ class TestLexer(unittest.TestCase):
         else:
             print(f"Lexer can tokenize invalid tokens correctly")
 
+
 class TestParser(unittest.TestCase):
     def test_parse_assignment(self):
         tokens = [("VARIABLE", "x"), ("KEYWORD", "="), ("NUMBER", "5"), ("EOF", "0")]
@@ -58,7 +72,6 @@ class TestParser(unittest.TestCase):
             print(f"Parser can parse assignments correctly")
         else:
             print(f"Parser can't parse assignments correctly")
-            
 
     def test_parse_output(self):
         tokens = [("KEYWORD", "PRINT"), ("NUMBER", "5"), ("EOF", "0")]
@@ -97,6 +110,7 @@ class TestParser(unittest.TestCase):
         else:
             print(f"Parser can't parse expressions correctly")
 
+
 class TestEvaluator(unittest.TestCase):
     def test_evaluator_with_expression(self):
         env = {}
@@ -110,7 +124,9 @@ class TestEvaluator(unittest.TestCase):
 
     def test_evaluator_with_assignment(self):
         env = {}
-        ast = Node("ASSIGNMENT", "=", [Node("VARIABLE", "x", []), Node("TERM", "5", [])])
+        ast = Node(
+            "ASSIGNMENT", "=", [Node("VARIABLE", "x", []), Node("TERM", "5", [])]
+        )
         evaluator(ast, env)
         self.assertEqual(env["x"], 5)
         if env["x"] == 5:
@@ -118,7 +134,7 @@ class TestEvaluator(unittest.TestCase):
         else:
             print(f"Evaluator can't evaluate assignments correctly")
 
-    @patch('builtins.input', return_value='5')
+    @patch("builtins.input", return_value="5")
     def test_evaluator_with_beg(self, input):
         env = {}
         ast = Node("BEG", "x", [])
@@ -136,5 +152,7 @@ class TestEvaluator(unittest.TestCase):
         if SystemExit:
             print(f"Evaluator can evaluate exits correctly")
 
+
 if __name__ == "__main__":
     unittest.main()
+
