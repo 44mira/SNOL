@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, TypeAlias
 
 """
 GRAMMAR (modified EBNF):
@@ -80,7 +80,7 @@ class Error(Exception):
 
 # An Environment consists of str-Variable pairs,
 # denoting name and their value in memory.
-type Environment = Dict[str, int | float]
+Environment: TypeAlias = Dict[str, int | float]
 
 # A Token is a tuple of two strings, the type of the token, and the value
-type Token = tuple[str, str]
+Token: TypeAlias = tuple[str, str]

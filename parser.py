@@ -1,7 +1,8 @@
 from interfaces import Node, Error
+from typing import TypeAlias
 from lexer import Token
 
-type Command = list[Token]
+Command: TypeAlias = list[Token]
 
 
 def parser(tokens: Command) -> Node:
