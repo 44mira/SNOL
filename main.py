@@ -32,7 +32,7 @@ def interpret(command: str, env: Environment):
     try:
         tokens = lexer(command)
         ast = parser(tokens)
-        result = evaluator(ast, env)
+        evaluator(ast, env)
     except Error as e:
         print(f"Error: {e}")
     except KeyError as e:
