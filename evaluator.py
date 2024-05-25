@@ -26,13 +26,23 @@ def evaluator(ast: Node, env: Environment):
 def _evaluate_expression(ast: Node, env: Environment) -> int | float:
     match ast.value:
         case "+":
-            return _evaluate_expression(ast.children[0], env) + _evaluate_term(
-                ast.children[1], env
-            )
+            op1 = _evaluate_expression(ast.children[0], env)
+            op2 = _evaluate_term(ast.children[1], env)
+
+            if type(op1) != type(op2):
+                raise Error(f"Cannot add {type(op1)} to {type(op2)}. Type mismatch.")
+
+            return op1 + op2
         case "-":
-            return _evaluate_expression(ast.children[0], env) - _evaluate_term(
-                ast.children[1], env
-            )
+            op1 = _evaluate_expression(ast.children[0], env)
+            op2 = _evaluate_term(ast.children[1], env)
+
+            if type(op1) != type(op2):
+                raise Error(
+                    f"Cannot subtract {type(op1)} to {type(op2)}. Type mismatch."
+                )
+
+            return op1 - op2
         case _:
             return _evaluate_term(ast, env)
 
@@ -40,17 +50,33 @@ def _evaluate_expression(ast: Node, env: Environment) -> int | float:
 def _evaluate_term(ast: Node, env: Environment) -> int | float:
     match ast.value:
         case "*":
-            return _evaluate_term(ast.children[0], env) * _evaluate_factor(
-                ast.children[1], env
-            )
+            op1 = _evaluate_term(ast.children[0], env)
+            op2 = _evaluate_factor(ast.children[1], env)
+
+            if type(op1) != type(op2):
+                raise Error(
+                    f"Cannot multiply {type(op1)} to {type(op2)}. Type mismatch."
+                )
+
+            return op1 * op2
         case "/":
-            return _evaluate_term(ast.children[0], env) / _evaluate_factor(
-                ast.children[1], env
-            )
+            op1 = _evaluate_term(ast.children[0], env)
+            op2 = _evaluate_factor(ast.children[1], env)
+
+            if type(op1) != type(op2):
+                raise Error(f"Cannot divide {type(op1)} to {type(op2)}. Type mismatch.")
+
+            if type(op1) == type(0):
+                return op1 // op2
+            return op1 / op2
         case "%":
-            return _evaluate_term(ast.children[0], env) % _evaluate_factor(
-                ast.children[1], env
-            )
+            op1 = _evaluate_term(ast.children[0], env)
+            op2 = _evaluate_factor(ast.children[1], env)
+
+            if type(op1) != type(op2):
+                raise Error(f"Cannot modulo {type(op1)} to {type(op2)}. Type mismatch.")
+
+            return op1 % op2
         case _:
             return _evaluate_factor(ast, env)
 
