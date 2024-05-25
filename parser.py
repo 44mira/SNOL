@@ -56,6 +56,7 @@ def _parse_expression(expression) -> Node | None:
 
     while expression[0][0] == "PRECEDENCE 1":
         operator = expression[0][1]
+
         del expression[0]
 
         right = _parse_term(expression)
@@ -107,6 +108,16 @@ def _parse_factor(factor) -> Node | None:
             raise Error("Expected right parenthesis")
         del factor[0]  # remove right parenthesis
         result = Node(None, "FACTOR", [result])
+        return result
+
+    elif (
+        factor[0][0] == "PRECEDENCE 1"
+        and factor[1][0] == "NUMBER"
+        or factor[1][0] == "VARIABLE"
+    ):
+        result = Node(("" if factor[0][1] == "+" else "-") + factor[1][1], "FACTOR")
+        del factor[0]
+        del factor[0]
         return result
 
     elif factor[0][0] == "NUMBER" or factor[0][0] == "VARIABLE":
