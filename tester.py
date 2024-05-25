@@ -144,6 +144,14 @@ class TestEvaluator(unittest.TestCase):
             mocked_print.call_count, 1, "Evaluator can't evaluate expressions correctly"
         )
 
+    def test_evaluate_type_error(self):
+        env: Environment = {"x": 5.0}
+        ast = Node(
+            "+", "EXPRESSION", [Node("2", "FACTOR", []), Node("x", "VARIABLE", [])]
+        )
+        with self.assertRaises(Error, msg="Evaluator can't handle type errors"):
+            evaluator(ast, env)
+
     def test_evaluate_term(self):
         env: Environment = {}
         ast = Node("*", "TERM", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
