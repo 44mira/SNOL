@@ -5,6 +5,7 @@ from interfaces import Node, Environment
 from unittest.mock import patch
 from parser import parser
 
+
 class TestLexer(unittest.TestCase):
     def test_lexer_with_numbers(self):
         command = "123"
@@ -133,17 +134,20 @@ class TestParser(unittest.TestCase):
 class TestEvaluator(unittest.TestCase):
     def test_evaluate_expression(self):
         env = {}
-        ast = Node("+", "EXPRESSION", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
-        with patch('builtins.print') as mocked_print:
+        ast = Node(
+            "+", "EXPRESSION", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])]
+        )
+        with patch("builtins.print") as mocked_print:
             evaluator(ast, env)
         mocked_print.assert_called_once_with(5)
         self.assertEqual(
-            mocked_print.call_count, 1, "Evaluator can't evaluate expressions correctly")
+            mocked_print.call_count, 1, "Evaluator can't evaluate expressions correctly"
+        )
 
     def test_evaluate_term(self):
         env = {}
         ast = Node("*", "TERM", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
-        with patch('builtins.print') as mocked_print:
+        with patch("builtins.print") as mocked_print:
             evaluator(ast, env)
         mocked_print.assert_called_once_with(6)
         self.assertEqual(
@@ -154,9 +158,7 @@ class TestEvaluator(unittest.TestCase):
         env = {}
         ast = Node("x", "ASSIGNMENT", [Node("5", "FACTOR", [])])
         evaluator(ast, env)
-        self.assertEqual(
-            env["x"], 5, "Evaluator can't evaluate assignments correctly"
-        )
+        self.assertEqual(env["x"], 5, "Evaluator can't evaluate assignments correctly")
 
     def test_evaluate_output(self):
         env = {"x": "5"}
@@ -167,7 +169,7 @@ class TestEvaluator(unittest.TestCase):
     def test_evaluate_beg(self):
         env = {}
         ast = Node("x", "BEG", [])
-        with patch('builtins.input', return_value="5"):
+        with patch("builtins.input", return_value="5"):
             evaluator(ast, env)
         self.assertEqual(env["x"], 5)
 
