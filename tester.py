@@ -75,6 +75,18 @@ class TestParser(unittest.TestCase):
         )
         self.assertEqual(ast, expected_ast, "Parser can't parse expressions correctly")
 
+        tokens = [
+            ("NUMBER", "5.0"),
+            ("PRECEDENCE 1", "-"),
+            ("NUMBER", "3"),
+            ("EOF", "0"),
+        ]
+        ast = parser(tokens)
+        expected_ast = Node(
+            "-", "EXPRESSION", [Node("5.0", "FACTOR", []), Node("3", "FACTOR", [])]
+        )
+        self.assertEqual(ast, expected_ast, "Parser can't parse expressions correctly")
+
     def test_parse_complex_expression(self):
         tokens = lexer("5 + 3 * (4 + 2 * 3)")
         ast = parser(tokens)
