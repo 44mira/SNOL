@@ -1,9 +1,9 @@
 import unittest
 from lexer import lexer, Error
-from evaluator import evaluator, Environment, Node
+from evaluator import evaluator
+from interfaces import Node, Environment
 from unittest.mock import patch
 from parser import parser
-
 
 class TestLexer(unittest.TestCase):
     def test_lexer_with_numbers(self):
@@ -130,48 +130,51 @@ class TestParser(unittest.TestCase):
         )
 
 
-# TODO: Fix the evaluator tests
+class TestEvaluator(unittest.TestCase):
+    def test_evaluate_expression(self):
+        env = {}
+        ast = Node("+", "EXPRESSION", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
+        with patch('builtins.print') as mocked_print:
+            evaluator(ast, env)
+        mocked_print.assert_called_once_with(5)
+        self.assertEqual(
+            mocked_print.call_count, 1, "Evaluator can't evaluate expressions correctly")
 
-# class TestEvaluator(unittest.TestCase):
-#     def test_evaluator_with_expression(self):
-#         env = {}
-#         ast = Node("EXPRESSION", "+", [Node("TERM", "5", []), Node("TERM", "3", [])])
-#         result = evaluator(ast, env)
-#         self.assertEqual(result, 8)
-#         if result == 8:
-#             print(f"Evaluator can evaluate expressions correctly")
-#         else:
-#             print(f"Evaluator can't evaluate expressions correctly")
-#
-#     def test_evaluator_with_assignment(self):
-#         env = {}
-#         ast = Node(
-#             "ASSIGNMENT", "=", [Node("VARIABLE", "x", []), Node("TERM", "5", [])]
-#         )
-#         evaluator(ast, env)
-#         self.assertEqual(env["x"], 5)
-#         if env["x"] == 5:
-#             print(f"Evaluator can evaluate assignments correctly")
-#         else:
-#             print(f"Evaluator can't evaluate assignments correctly")
-#
-#     @patch("builtins.input", return_value="5")
-#     def test_evaluator_with_beg(self, input):
-#         env = {}
-#         ast = Node("BEG", "x", [])
-#         evaluator(ast, env)
-#         self.assertEqual(env["x"], 5)
-#         if env["x"] == 5:
-#             print(f"Evaluator can evaluate beg correctly")
-#         else:
-#             print(f"Evaluator can't evaluate beg correctly")
-#
-#     def test_evaluator_with_exit(self):
-#         ast = Node("EXIT", "", [])
-#         with self.assertRaises(SystemExit):
-#             evaluator(ast, {})
-#         if SystemExit:
-#             print(f"Evaluator can evaluate exits correctly")
+    def test_evaluate_term(self):
+        env = {}
+        ast = Node("*", "TERM", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
+        with patch('builtins.print') as mocked_print:
+            evaluator(ast, env)
+        mocked_print.assert_called_once_with(6)
+        self.assertEqual(
+            mocked_print.call_count, 1, "Evaluator can't evaluate terms correctly"
+        )
+
+    def test_evaluate_assignment(self):
+        env = {}
+        ast = Node("x", "ASSIGNMENT", [Node("5", "FACTOR", [])])
+        evaluator(ast, env)
+        self.assertEqual(
+            env["x"], 5, "Evaluator can't evaluate assignments correctly"
+        )
+
+    def test_evaluate_output(self):
+        env = {"x": "5"}
+        node = Node("OUTPUT", "VARIABLE", [Node("VARIABLE", "x", [])])
+        result = evaluator(node, env)
+        self.assertIsNone(result, "Evaluator can't evaluate output correctly")
+
+    def test_evaluate_beg(self):
+        env = {}
+        ast = Node("x", "BEG", [])
+        with patch('builtins.input', return_value="5"):
+            evaluator(ast, env)
+        self.assertEqual(env["x"], 5)
+
+    def test_evaluate_exit(self):
+        ast = Node(None, "EXIT", [])
+        with self.assertRaises(SystemExit):
+            evaluator(ast, {})
 
 
 if __name__ == "__main__":
