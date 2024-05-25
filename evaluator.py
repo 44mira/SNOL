@@ -19,6 +19,8 @@ def evaluator(ast: Node, env: Environment):
             return _evaluate_expression(ast, env)
         case "TERM":
             return _evaluate_term(ast, env)
+        case "FACTOR":
+            return _evaluate_factor(ast, env)
         case "ASSIGNMENT":
             return _evaluate_assignment(str(ast.value), ast.children[0], env)
 
