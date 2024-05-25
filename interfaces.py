@@ -72,11 +72,11 @@ class Node:
 
         return f"<{self.node_type} {self.value}> ({children})"
 
-    def __eq__(self, value) -> bool:
+    def __eq__(self, other) -> bool:
         tests = [
-            self.value == value.value,
-            self.node_type == value.node_type,
-            self.children == value.children,
+            self.value == other.value,
+            self.node_type == other.node_type,
+            self.children == other.children,
         ]
 
         return all(tests)
