@@ -141,7 +141,7 @@ def _parse_output(output) -> Node | None:
     del output[0]  # remove print keyword
 
     if output[0][0] == "NUMBER" or output[0][0] == "VARIABLE":
-        result = Node(output[0][1], "OUTPUT", [])
+        result = Node(output[0][0], "OUTPUT", [output[0][1]])
         del output[0]
         return result
 
