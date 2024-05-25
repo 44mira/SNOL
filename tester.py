@@ -133,7 +133,7 @@ class TestParser(unittest.TestCase):
 
 class TestEvaluator(unittest.TestCase):
     def test_evaluate_expression(self):
-        env = {}
+        env: Environment = {}
         ast = Node(
             "+", "EXPRESSION", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])]
         )
@@ -145,7 +145,7 @@ class TestEvaluator(unittest.TestCase):
         )
 
     def test_evaluate_term(self):
-        env = {}
+        env: Environment = {}
         ast = Node("*", "TERM", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
         with patch("builtins.print") as mocked_print:
             evaluator(ast, env)
@@ -155,28 +155,29 @@ class TestEvaluator(unittest.TestCase):
         )
 
     def test_evaluate_assignment(self):
-        env = {}
+        env: Environment = {}
         ast = Node("x", "ASSIGNMENT", [Node("5", "FACTOR", [])])
         evaluator(ast, env)
         self.assertEqual(env["x"], 5, "Evaluator can't evaluate assignments correctly")
 
     def test_evaluate_output(self):
-        env = {"x": "5"}
+        env: Environment = {"x": 5}
         node = Node("OUTPUT", "VARIABLE", [Node("VARIABLE", "x", [])])
         result = evaluator(node, env)
         self.assertIsNone(result, "Evaluator can't evaluate output correctly")
 
     def test_evaluate_beg(self):
-        env = {}
+        env: Environment = {}
         ast = Node("x", "BEG", [])
         with patch("builtins.input", return_value="5"):
             evaluator(ast, env)
         self.assertEqual(env["x"], 5)
 
     def test_evaluate_exit(self):
+        env: Environment = {}
         ast = Node(None, "EXIT", [])
         with self.assertRaises(SystemExit):
-            evaluator(ast, {})
+            evaluator(ast, env)
 
 
 if __name__ == "__main__":
