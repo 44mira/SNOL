@@ -40,7 +40,7 @@ def _parse_command(command: Command) -> Node:
     return ast
 
 
-def _parse_expression(expression) -> Node | None:
+def _parse_expression(expression: list[Token]) -> Node | None:
     """
     Attempts to parse an expression from the given tokens.
 
@@ -53,6 +53,15 @@ def _parse_expression(expression) -> Node | None:
     # if left is not a term, return None
     if not left:
         return
+
+    while expression[0][0] == "PRECEDENCE 1" and expression[1][0] == "PRECEDENCE 1":
+        while expression[0][1] == "+" and expression[1][0] == "PRECEDENCE 1":
+            del expression[0]
+        while expression[0][1] == "-" and expression[1][0] == "PRECEDENCE 1":
+            del expression[1]
+            if expression[0][1] == "-":
+                del expression[0]
+                expression.insert(0, ("PRECEDENCE 1", "+"))
 
     while expression[0][0] == "PRECEDENCE 1":
         operator = expression[0][1]
