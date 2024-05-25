@@ -59,7 +59,8 @@ class TestParser(unittest.TestCase):
     def test_parse_output(self):
         tokens = [("KEYWORD", "PRINT"), ("NUMBER", "5"), ("EOF", "0")]
         ast = parser(tokens)
-        expected_ast = Node("5", "OUTPUT", [])
+        expected_ast = Node("NUMBER", "OUTPUT", ["5"])
+
         self.assertEqual(ast, expected_ast, "Parser can't parse output correctly")
 
     def test_parse_exit(self):
@@ -137,12 +138,8 @@ class TestEvaluator(unittest.TestCase):
         ast = Node(
             "+", "EXPRESSION", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])]
         )
-        with patch("builtins.print") as mocked_print:
-            evaluator(ast, env)
-        mocked_print.assert_called_once_with(5)
-        self.assertEqual(
-            mocked_print.call_count, 1, "Evaluator can't evaluate expressions correctly"
-        )
+        result = evaluator(ast, env)
+        self.assertEqual(result, 5, "Evaluator can't evaluate expressions correctly")
 
     def test_evaluate_type_error(self):
         env: Environment = {"x": 5.0}
@@ -155,12 +152,8 @@ class TestEvaluator(unittest.TestCase):
     def test_evaluate_term(self):
         env: Environment = {}
         ast = Node("*", "TERM", [Node("2", "FACTOR", []), Node("3", "FACTOR", [])])
-        with patch("builtins.print") as mocked_print:
-            evaluator(ast, env)
-        mocked_print.assert_called_once_with(6)
-        self.assertEqual(
-            mocked_print.call_count, 1, "Evaluator can't evaluate terms correctly"
-        )
+        result = evaluator(ast, env)
+        self.assertEqual(result, 6, "Evaluator can't evaluate terms correctly")
 
     def test_evaluate_assignment(self):
         env: Environment = {}
@@ -170,7 +163,12 @@ class TestEvaluator(unittest.TestCase):
 
     def test_evaluate_output(self):
         env: Environment = {"x": 5}
-        node = Node("OUTPUT", "VARIABLE", [Node("VARIABLE", "x", [])])
+        node = Node("VARIABLE", "OUTPUT", ["x"])
+        result = evaluator(node, env)
+        self.assertIsNone(result, "Evaluator can't evaluate output correctly")
+
+        env: Environment = {}
+        node = Node("NUMBER", "OUTPUT", [5])
         result = evaluator(node, env)
         self.assertIsNone(result, "Evaluator can't evaluate output correctly")
 
