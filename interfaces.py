@@ -72,6 +72,15 @@ class Node:
 
         return f"<{self.node_type} {self.value}> ({children})"
 
+    def __eq__(self, value) -> bool:
+        tests = [
+            self.value == value.value,
+            self.node_type == value.node_type,
+            self.children == value.children,
+        ]
+
+        return all(tests)
+
 
 class Error(Exception):
     def __init__(self, message: str) -> None:
