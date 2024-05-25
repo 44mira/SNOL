@@ -26,6 +26,9 @@ def evaluator(ast: Node, env: Environment):
 
 
 def _evaluate_expression(ast: Node, env: Environment) -> int | float:
+    if not ast:
+        raise Error("Cannot evaluate expression")
+
     match ast.value:
         case "+":
             op1 = _evaluate_expression(ast.children[0], env)
@@ -50,6 +53,9 @@ def _evaluate_expression(ast: Node, env: Environment) -> int | float:
 
 
 def _evaluate_term(ast: Node, env: Environment) -> int | float:
+    if not ast:
+        raise Error("Cannot evaluate term")
+
     match ast.value:
         case "*":
             op1 = _evaluate_term(ast.children[0], env)
@@ -84,6 +90,9 @@ def _evaluate_term(ast: Node, env: Environment) -> int | float:
 
 
 def _evaluate_factor(ast: Node, env: Environment) -> int | float:
+    if not ast:
+        raise Error("Cannot evaluate factor")
+
     val = str(ast.value)
 
     try:
