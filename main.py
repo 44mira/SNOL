@@ -37,6 +37,8 @@ def interpret(command: str, env: Environment):
         print(f"Error: {e}")
     except KeyError as e:
         print(f"Error: Variable {e} is not defined")
+    except ValueError as e:
+        print(f"Error: provided value is not a number")
 
 
 def eval_loop():
