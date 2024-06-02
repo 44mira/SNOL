@@ -101,6 +101,8 @@ def _evaluate_factor(ast: Node, env: Environment) -> int | float:
         try:
             return float(str(val))
         except ValueError:
+            if val == "None":
+                return _evaluate_expression(ast.children[0], env)
             if val[0] == "-":
                 return -env[val[1:]]
             return env[val]
